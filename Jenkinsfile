@@ -79,7 +79,6 @@ pipeline {
                     sh """
                     docker build -t $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG} -f Dockerfile .
                     """
-                }
             }
         }
 
