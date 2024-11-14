@@ -2,8 +2,8 @@ pipeline {
     agent any // Ensure you have an agent/node configured with Ubuntu
     
     environment {
-        DOCKER_USERNAME = credentials('DOCKER_USERNAME') // Replace with your Jenkins credentials ID
-        DOCKER_PASSWORD = credentials('DOCKER_PASSWORD') // Replace with your Jenkins credentials ID
+        DOCKER_USERNAME = credentials('DOCKER_USERNAME') // Jenkins credentials ID
+        DOCKER_PASSWORD = credentials('DOCKER_PASSWORD') // Jenkins credentials ID
     }
 
     stages {
@@ -37,6 +37,10 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     
+                    if (!token) {
+                        error("Failed to retrieve Docker Hub token.")
+                    }
+                    
                     def latestTag = sh(
                         script: """
                         curl -s "https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/react-jenkins/tags/?page_size=1" \
@@ -45,7 +49,11 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     
-                    env.LATEST_TAG = latestTag ?: "v0" // Default to "v0" if no tag exists
+                    if (!latestTag || latestTag == "null") {
+                        latestTag = "v0" // Default to "v0" if no tag exists
+                    }
+                    
+                    env.LATEST_TAG = latestTag
                     echo "Latest tag: ${env.LATEST_TAG}"
                 }
             }
@@ -54,9 +62,13 @@ pipeline {
         stage('Increment Docker image tag') {
             steps {
                 script {
-                    def patch = env.LATEST_TAG.replace('v', '').toInteger()
-                    def newPatch = patch + 1
-                    env.NEW_TAG = "v${newPatch}"
+                    def match = (env.LATEST_TAG =~ /v(\d+)/)
+                    if (match) {
+                        def patch = match[0][1].toInteger()
+                        env.NEW_TAG = "v${patch + 1}"
+                    } else {
+                        env.NEW_TAG = "v1" // Start with v1 if LATEST_TAG is not in expected format
+                    }
                     echo "New Docker tag: ${env.NEW_TAG}"
                 }
             }
@@ -71,7 +83,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Push Docker image to Docker Hub') {
             steps {
