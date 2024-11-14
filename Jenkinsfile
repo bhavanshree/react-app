@@ -76,7 +76,6 @@ pipeline {
 
         stage('Build Docker image') {
             steps {
-                dir('REACT-APP') {
                     sh """
                     docker build -t $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG} -f Dockerfile .
                     """
