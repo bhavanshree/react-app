@@ -1,6 +1,6 @@
 pipeline {
     agent any // Ensure you have an agent/node configured with Ubuntu
-    
+
     environment {
         DOCKER_USERNAME = credentials('DOCKER_USERNAME') // Jenkins credentials ID
         DOCKER_PASSWORD = credentials('DOCKER_PASSWORD') // Jenkins credentials ID
@@ -76,9 +76,9 @@ pipeline {
 
         stage('Build Docker image') {
             steps {
-                    sh """
-                    docker build -t $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG} -f Dockerfile .
-                    """
+                sh """
+                docker build -t $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG} -f Dockerfile .
+                """
             }
         }
 
@@ -87,7 +87,6 @@ pipeline {
                 sh "docker push $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG}"
             }
         }
-    }
 
         stage('Deploy to Server') {
             steps {
@@ -104,10 +103,10 @@ pipeline {
             }
         }
     }
-	
+
     post {
         always {
             cleanWs()
         }
     }
-
+}
