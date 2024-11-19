@@ -90,21 +90,18 @@ pipeline {
                 sh "docker push $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG}"
             }
         }
-
         stage('Deploy to Server') {
             steps {
                 script {
                     sshagent(credentials: ['REMOTE_SSH']) { 
                         sh '''
-                            ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP << EOF
-                                cd /home/ubuntu/react
-                                bash hello.sh
-                            EOF
+                            ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "cd /home/ubuntu/react && bash hello.sh"
                         '''
                     }
                 }
             }
         }
+
     }
 
 }
