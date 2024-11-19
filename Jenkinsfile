@@ -4,6 +4,9 @@ pipeline {
     environment {
         DOCKER_USERNAME = credentials('DOCKER_USERNAME') // Jenkins credentials ID
         DOCKER_PASSWORD = credentials('DOCKER_PASSWORD') // Jenkins credentials ID
+        REMOTE_SSH = credentials('REMOTE_SSH') // Jenkins credentials ID
+        REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
+        REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
     }
 
     stages {
