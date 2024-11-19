@@ -89,9 +89,25 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            cleanWs() // Clean up workspace after execution
+        stage('Deploy to Server') {
+            steps {
+                script {
+                    sshagent(credentials: ['REMOTE_SSH']) { 
+                        sh """
+                        ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_IP "
+                            cd /root/react;
+                            bash hello.sh
+                        "
+                        """
+                    }
+                }
+            }
         }
     }
-}
+	
+    post {
+        always {
+            cleanWs()
+        }
+    }
+
