@@ -27,7 +27,7 @@ pipeline {
         //         }
         //     }
         //     steps {
-        //         echo "Changes detected in ${env.TARGET_DIRECTORY}. Proceeding with pipeline execution." 
+        //         echo "Changes detected in ${env.TARGET_DIRECTORY}. Proceeding with pipeline execution."
         //     }
         // }
 
