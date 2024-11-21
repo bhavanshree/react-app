@@ -7,6 +7,7 @@ pipeline {
         REMOTE_SSH = credentials('REMOTE_SSH') // Jenkins credentials ID
         REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
         REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
+        // TARGET_DIRECTORY = '/' // Set your target directory here
     }
 
     stages {
@@ -15,6 +16,20 @@ pipeline {
                 checkout scm
             }
         }
+        // stage('Check for changes in specific directory') {
+        //     when {
+        //         expression {
+        //             def changes = sh(
+        //                 script: "git diff --name-only HEAD~1 HEAD | grep '^${env.TARGET_DIRECTORY}' || true",
+        //                 returnStdout: true
+        //             ).trim()
+        //             return changes != ''
+        //         }
+        //     }
+        //     steps {
+        //         echo "Changes detected in ${env.TARGET_DIRECTORY}. Proceeding with pipeline execution."
+        //     }
+        // }
 
         stage('Set up Docker Buildx') {
             steps {
