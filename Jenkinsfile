@@ -20,7 +20,7 @@ pipeline {
         //     when {
         //         expression {
         //             def changes = sh(
-        //                 script: "git diff --name-only HEAD~1 HEAD | grep '^${env.TARGET_DIRECTORY}' || true",
+        //                 script: "git diff --name-only HEAD~1 HEAD | grep '^${env.TARGET_DIRECTORY}' || true", 
         //                 returnStdout: true
         //             ).trim()
         //             return changes != ''
