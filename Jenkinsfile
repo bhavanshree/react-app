@@ -119,4 +119,9 @@ pipeline {
 
     }
 
+    // Trigger the pipeline only when a push event happens on GitHub
+    triggers {
+        githubPush() // Triggers on GitHub push events
+    }    
+
 }
