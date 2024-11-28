@@ -110,8 +110,6 @@ pipeline {
                 sh "docker push $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG}"
             }
         }
-
-    }
     	stage('Deploy to Server') {
         	steps {
             	script {
@@ -123,5 +121,7 @@ pipeline {
             	}
         	}
     	}
+    }
+
 
 }
