@@ -4,10 +4,10 @@ pipeline {
     environment {
         DOCKER_USERNAME = credentials('DOCKER_USERNAME') // Jenkins credentials ID
         DOCKER_PASSWORD = credentials('DOCKER_PASSWORD') // Jenkins credentials ID
-        // REMOTE_SSH = credentials('REMOTE_SSH') // Jenkins credentials ID
-        // REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
-        // REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
-        // // TARGET_DIRECTORY = '/' // Set your target directory here
+        REMOTE_SSH = credentials('REMOTE_SSH') // Jenkins credentials ID
+        REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
+        REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
+        // TARGET_DIRECTORY = '/' // Set your target directory here
     }
 
     stages {
@@ -105,23 +105,7 @@ pipeline {
                 sh "docker push $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG}"
             }
         }
-    //     stage('Deploy to Server') {
-    //         steps {
-    //             script {
-    //                 sshagent(credentials: ['REMOTE_SSH']) { 
-    //                     sh '''
-    //                         ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "cd /home/ubuntu/react && bash hello.sh"
-    //                     '''
-    //                 }
-    //             }
-    //         }
-    //     }
 
-    // }
-
-    // // Trigger the pipeline only when a push event happens on GitHub
-    // triggers {
-    //     githubPush() // Triggers on GitHub push events
-    // }    
-
+    }
+   
 }
