@@ -46,36 +46,41 @@ pipeline {
         stage('Get the latest tag from Docker Hub') {
             steps {
                 script {
+                    // Get the token from Docker Hub
                     def token = sh(
                         script: '''
                         curl -s -X POST "https://hub.docker.com/v2/users/login/" \
                         -H "Content-Type: application/json" \
-                        -d '{"username": "'"$DOCKER_USERNAME"'", "password": "'"$DOCKER_PASSWORD"'"}' | jq -r .token
+                        -d '{"username": "'"$DOCKER_USERNAME"'", "password": "'"$DOCKER_PASSWORD"'"}' \
+                        | grep -o '"token":"[^"]*"' | cut -d':' -f2 | tr -d '"'
                         ''',
                         returnStdout: true
                     ).trim()
-                    
+
                     if (!token) {
                         error("Failed to retrieve Docker Hub token.")
                     }
-                    
+
+                    // Get the latest tag from Docker Hub
                     def latestTag = sh(
                         script: """
                         curl -s "https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/react-jenkins/tags/?page_size=1" \
-                        -H "Authorization: Bearer $token" | jq -r '.results[0].name'
+                        -H "Authorization: Bearer $token" \
+                        | grep -o '"name":"[^"]*"' | cut -d':' -f2 | tr -d '"'
                         """,
                         returnStdout: true
                     ).trim()
-                    
+
                     if (!latestTag || latestTag == "null") {
                         latestTag = "v0" // Default to "v0" if no tag exists
                     }
-                    
+
                     env.LATEST_TAG = latestTag
                     echo "Latest tag: ${env.LATEST_TAG}"
                 }
             }
         }
+
 
         stage('Increment Docker image tag') {
             steps {
