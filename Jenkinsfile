@@ -7,7 +7,7 @@ pipeline {
         REMOTE_SSH = credentials('REMOTE_SSH') // Jenkins credentials ID
         REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
         REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
-        // TARGET_DIRECTORY = '/' // Set your target directory here
+        // TARGET_DIRECTORY = '/' // Set your target directory here 
     }
 
     stages {
