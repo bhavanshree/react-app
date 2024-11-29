@@ -8,7 +8,7 @@ pipeline {
         REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
         REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
         DOCKER_REPO = 'react-multipipeline'
-        // TARGET_DIRECTORY = '/' // Set your target directory here 
+        // TARGET_DIRECTORY = '/' // Set your target directory here
     }
 
     stages {
