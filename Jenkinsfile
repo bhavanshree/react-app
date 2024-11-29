@@ -7,6 +7,7 @@ pipeline {
         REMOTE_SSH = credentials('REMOTE_SSH') // Jenkins credentials ID
         REMOTE_USER = credentials('REMOTE_USER') // Jenkins credentials ID
         REMOTE_IP = credentials('REMOTE_IP') // Jenkins credentials ID
+        DOCKER_REPO = react-multipipeline
         // TARGET_DIRECTORY = '/' // Set your target directory here
     }
 
@@ -64,7 +65,7 @@ pipeline {
                     // Get the latest tag from Docker Hub
                     def latestTag = sh(
                         script: """
-                        curl -s "https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/react-jenkins/tags/?page_size=1" \
+                        curl -s "https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/$DOCKER_REPO/tags/?page_size=1" \
                         -H "Authorization: Bearer $token" \
                         | grep -o '"name":"[^"]*"' | cut -d':' -f2 | tr -d '"'
                         """,
@@ -100,14 +101,14 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 sh """
-                docker build -t $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG} -f Dockerfile .
+                docker build -t $DOCKER_USERNAME/$DOCKER_REPO:${env.NEW_TAG} -f Dockerfile .
                 """
             }
         }
 
         stage('Push Docker image to Docker Hub') {
             steps {
-                sh "docker push $DOCKER_USERNAME/react-jenkins:${env.NEW_TAG}"
+                sh "docker push $DOCKER_USERNAME/$DOCKER_REPO:${env.NEW_TAG}"
             }
         }
     	stage('Deploy to Server') {
@@ -115,7 +116,7 @@ pipeline {
             	script {
                 	sshagent(credentials: ['REMOTE_SSH']) {
                     	sh '''
-                        	ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "cd /home/ubuntu/react && bash hello.sh"
+                        	ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "cd /home/ubuntu/react && bash practice.sh"
                     	'''
                 	}
             	}
