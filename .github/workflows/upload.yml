@@ -1,4 +1,4 @@
-name: Node CI
+name: react-app
 
 on:
     push:
@@ -15,15 +15,15 @@ jobs:
           npm install
           npm run build --if-present
           npm test
-      - name: Archive production artifacts
+
+    
+      - name: uploading a single file
         uses: actions/upload-artifact@v4
         with:
-          name: dist-without-markdown
-          path: |
-            dist
-            !dist/**/*.md
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
-        with:
-          name: code-coverage-report
-          path: output/test/code-coverage.html
+            name: my-artifact
+            path: echo.txt
+    #   - name: Archive code coverage results
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: code-coverage-report
+    #       path: output/test/code-coverage.html
