@@ -2,7 +2,7 @@ name: Share data between jobs
 
 on:
     push:
-      branches: ['artifacts']
+      branches: ['jenkins']
 
 jobs:
   job_1:
