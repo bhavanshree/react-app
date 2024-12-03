@@ -32,6 +32,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          use-docker: true
 
       - name: Build and push Docker image
         id: push
@@ -40,8 +41,10 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
+          outputs: type=docker
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+        
         
         
       
