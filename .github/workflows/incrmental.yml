@@ -23,14 +23,12 @@ jobs:
           echo "VERSION=$((VERSION + 1))" >> $GITHUB_ENV
 
       - name: Commit updated version
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add version.txt
           git commit -m "Update version to ${{ env.VERSION }}"
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+          git push
 
       - name: Create example file
         run: echo "This is version ${{ env.VERSION }}" > echo.txt
