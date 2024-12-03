@@ -30,8 +30,6 @@ jobs:
           git commit -m "Update version to ${{ env.VERSION }}"
           git push
 
-      - name: Create example file
-        run: echo "This is version ${{ env.VERSION }}" > echo.txt
 # upload the artifact
       - name: Upload artifact with incremental versioning
         uses: actions/upload-artifact@v4
