@@ -2,7 +2,7 @@ name: Build and Publish React Docker Image
 
 on:
   push:
-    branches: ['practice']
+    branches: ['jenkins']
 
 env:
   REGISTRY: ghcr.io
