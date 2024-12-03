@@ -1,0 +1,45 @@
+name: react-app
+
+on:
+    push:
+      branches: ['artifacts']
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensure full history is fetched, including tags
+
+      - name: Get the latest tag and increment version
+        id: versioning
+        run: |
+          # Get the latest tag or default to v0
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0")
+          echo "Latest tag: $LATEST_TAG"
+          
+          # Extract the numeric part of the tag, increment it
+          VERSION=$(echo $LATEST_TAG | sed 's/v//' | awk '{print $1 + 1}')
+          echo "Next version: v$VERSION"
+          
+          # Export version as an environment variable
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Upload artifact with versioning
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact-v${{ env.VERSION }}
+          path: echo.txt
+          retention-days: 5
+
+      - name: Create and push a new tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create a new Git tag for the version
+          git tag v${{ env.VERSION }}
+          
+          # Push the tag to the remote repository
+          git push origin v${{ env.VERSION }}
