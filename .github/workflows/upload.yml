@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - artifacts
-
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -16,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Using the latest stable Node.js version
+          node-version: '18'
 
       - name: Cache Node.js modules
         uses: actions/cache@v3
@@ -34,11 +33,12 @@ jobs:
           npm install react-scripts@latest
           npm install webpack@latest
 
-      - name: Set environment variable for OpenSSL compatibility
-        run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
-
       - name: Build the React app
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
         run: npm run build
 
       - name: Run tests
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
         run: npm test
