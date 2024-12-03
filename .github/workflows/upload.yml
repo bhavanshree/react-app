@@ -23,11 +23,15 @@ jobs:
             name: my-artifact
             path: echo.txt
             retention-days: 5
-            
+
       - name: Download a single artifact
         uses: actions/download-artifact@v4
         with:
             name: my-artifact
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
     #   - name: Archive code coverage results
     #     uses: actions/upload-artifact@v4
     #     with:
