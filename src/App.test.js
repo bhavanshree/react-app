@@ -1,4 +1,7 @@
-import { act } from 'react'; // Correct import
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { act } from 'react'; // Updated import
+import App from './App';
 
 test('renders app running message', () => {
   render(<App />);
