@@ -1,0 +1,41 @@
+name: react-app
+
+on:
+    push:
+      branches: ['artifacts']
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Load current version
+        id: load-version
+        run: |
+          if [ -f version.txt ]; then
+            VERSION=$(cat version.txt)
+          else
+            VERSION=0
+          fi
+          echo "VERSION=$((VERSION + 1))" > version.txt
+          echo "VERSION=$((VERSION + 1))" >> $GITHUB_ENV
+
+      - name: Commit updated version
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add version.txt
+          git commit -m "Update version to ${{ env.VERSION }}"
+          git push
+
+      - name: Create example file
+        run: echo "This is version ${{ env.VERSION }}" > echo.txt
+
+      - name: Upload artifact with incremental versioning
+        uses: actions/upload-artifact@v4
+        with:
+            name: my-artifact-v${{ env.VERSION }}
+            path: echo.txt
+            retention-days: 5

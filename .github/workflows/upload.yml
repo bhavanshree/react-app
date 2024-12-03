@@ -2,7 +2,7 @@ name: react-app
 
 on:
     push:
-      branches: ['artifacts']
+      branches: ['jenkins']
 
 jobs:
   build_and_test:
