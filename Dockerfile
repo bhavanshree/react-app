@@ -16,7 +16,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve the static files using a smaller Nginx base image 
+# Stage 2: Serve the static files using a smaller Nginx base image
 FROM nginx:alpine
 
 # Remove the default Nginx files and config
